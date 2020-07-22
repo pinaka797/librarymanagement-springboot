@@ -1,1 +1,1 @@
-Spring boot restful API as a backend. Database used: H2
+Spring boot restful API in Java. Database used: H2
