@@ -6,6 +6,7 @@ import com.genpact.librarymanagement.model.Library;
 import com.genpact.librarymanagement.service.BookService;
 import com.genpact.librarymanagement.service.LibraryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class LibraryController {
     @Autowired
     LibraryService libraryService;
 
-    @GetMapping(value="/book")
+    @GetMapping(value="/books")
     public List<Book> getBook() {
         List<Book> bookList = bookService.getAllBooks();
         return bookList;
@@ -29,8 +30,26 @@ public class LibraryController {
         List<Library> bookList = libraryService.getAll();
         return bookList;
     }
+    
+    @PostMapping("/books")
+	public ResponseEntity<Book> createBook(@RequestBody Book book){
+		return ResponseEntity.ok().body(this.bookService.createBook(book));
+	}
+	
+	@PutMapping("/books/{id}")
+	public ResponseEntity<Book> updateBook(@PathVariable long id, @RequestBody Book book) throws ResourceNotFoundException{
+		book.setId(id);
+		return ResponseEntity.ok().body(this.bookService.updateBook(book));
+	}
 
-    @GetMapping("/library/{id}")
+	@DeleteMapping("/books/{id}")
+	public HttpStatus deleteBook(@PathVariable long id) throws ResourceNotFoundException{
+		this.bookService.deleteBook(id);
+		return HttpStatus.OK;
+	}
+	
+	
+	@GetMapping("/books/{id}")
     public List<Book> getAllBooksInLibrary(@PathVariable(value = "id") Long bid)
             throws ResourceNotFoundException {
         List<Book> list = libraryService.getAllBooks();
